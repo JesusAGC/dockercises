@@ -1,0 +1,38 @@
+version: "3.3"
+
+services: 
+  db:
+    image: mongo:latest
+    container_name: mongo_compose
+    ports:
+      - "27017:27017"
+    networks: 
+      - "custom"
+    environment: 
+      # MONGO_INITDB_ROOT_USERNAME: "root"
+      # MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_INITDB_DATABASE: "database_for_persons"
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  mongo-express:
+    image: mongo-express
+    container_name: mexpress_compose
+    restart: always
+    ports:
+      - "8081:8081"
+    networks: 
+      - "custom"
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: DASistemas
+      ME_CONFIG_BASICAUTH_PASSWORD: ex-especial567
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_SERVER: db
+    depends_on: 
+      - "db"
+
+
+
+networks:
+  custom:
+    driver: bridge
