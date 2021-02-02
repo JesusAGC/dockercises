@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -31,10 +32,10 @@ func main() {
 
 func BringOnePerson(id int) {
 	// mycollection := database()
-
+	// ctx := context.TODO()
 }
 
-func BringEveryone() {
+func BringEveryone() []byte {
 	mycollection := database()
 	ctx := context.TODO()
 	cursor, err := mycollection.Find(ctx, bson.M{})
@@ -46,11 +47,21 @@ func BringEveryone() {
 		log.Fatal(err)
 	}
 	// fmt.Println(people)
-
-	b, err := bson.MarshalExtJSON(people[0], true, true)
-
-	fmt.Println(b)
-
+	l := int(len(people))
+	var collective Persons
+	ds := make([]Person, l)
+	// bsonbytes, _ := bson.Marshal(people[0])
+	// bson.Unmarshal(bsonbytes, &dude)
+	for i := 0; i < len(people); i++ {
+		var dude Person
+		bsonbytes, _ := bson.Marshal(people[i])
+		bson.Unmarshal(bsonbytes, &dude)
+		ds[i] = dude
+	}
+	collective.Persons = ds
+	// fmt.Println(collective.Persons)
+	j, err := json.Marshal(collective)
+	return j
 }
 
 func database() *mongo.Collection {
