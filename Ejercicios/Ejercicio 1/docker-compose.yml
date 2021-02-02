@@ -12,8 +12,8 @@ services:
       # MONGO_INITDB_ROOT_USERNAME: "root"
       # MONGO_INITDB_ROOT_PASSWORD: "password"
       MONGO_INITDB_DATABASE: "database_for_persons"
-    volumes:
-      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    # volumes:
+    #   - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   mongo-express:
     image: mongo-express
@@ -30,6 +30,16 @@ services:
       ME_CONFIG_MONGODB_SERVER: db
     depends_on: 
       - "db"
+
+  golang-data:
+    build: 
+      context: ./Contenedor C/
+    container_name: golang_getter
+    networks: 
+      - "custom"
+    depends_on: 
+      - "db"
+    command: go run scraper.go
 
 
 

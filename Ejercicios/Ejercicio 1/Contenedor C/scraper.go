@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -40,7 +41,7 @@ type Persons struct {
 
 func main() {
 	listP := scraper()
-	myPrinter(listP)
+	// myPrinter(listP)
 	databaseImport(listP)
 }
 func scraper() Persons {
@@ -61,7 +62,7 @@ func scraper() Persons {
 
 	xml.Unmarshal(byteValue, &collective)
 
-	fmt.Println(collective)
+	// fmt.Println(collective)
 
 	return collective
 }
@@ -81,7 +82,9 @@ func myPrinter(Pe Persons) {
 }
 
 func databaseImport(Pe Persons) {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	// clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	time.Sleep(15 * time.Second)
+	clientOptions := options.Client().ApplyURI("mongodb://db:27017/")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
@@ -93,7 +96,7 @@ func databaseImport(Pe Persons) {
 		log.Fatal(err)
 	}
 	fmt.Println("Conectado a MongoDB")
-	PersonsCollection := client.Database("People").Collection("Persons")
+	PersonsCollection := client.Database("database_for_persons").Collection("Persons")
 
 	for i := 0; i < len(Pe.Persons); i++ {
 		HumanB := ThePerson{Pe.Persons[i].ID, Pe.Persons[i].FirstName, Pe.Persons[i].LastName, Pe.Persons[i].Company, Pe.Persons[i].Email, Pe.Persons[i].IPAddress, Pe.Persons[i].PhoneNumber}
