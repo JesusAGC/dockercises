@@ -41,6 +41,18 @@ services:
       - "db"
     command: go run scraper.go
 
+  golang-api:
+    build: 
+      context: ./Contenedor D/
+    container_name: golang_server
+    ports:
+      - "7777:7777"
+    networks: 
+      - "custom"
+    depends_on: 
+      - "db"
+    command: go run my_api.go
+
 
 
 networks:

@@ -47,7 +47,6 @@ func main() {
 func scraper() Persons {
 
 	xmlFile, err := os.Open("people.xml")
-	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err)
 	}
