@@ -23,7 +23,7 @@ type Person struct {
 
 type Persons struct {
 	XMLName xml.Name `xml:"people"`
-	People  []Person `xml:"person" json:"person"`
+	People  []Person `xml:"person" json:"people"`
 }
 
 func Bring_My_Collection() *mongo.Collection {
