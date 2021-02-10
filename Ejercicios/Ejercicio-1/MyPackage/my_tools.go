@@ -2,6 +2,7 @@ package MyPackage
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
 
@@ -10,17 +11,19 @@ import (
 )
 
 type Person struct {
-	ID          int    `xml:"id" json:"id"`
-	FirstName   string `xml:"first_name" json:"first_name"`
-	LastName    string `xml:"last_name" json:"last_name"`
-	Company     string `xml:"company" json:"company"`
-	Email       string `xml:"email" json:"email"`
-	IPAddress   string `xml:"ip_address" json:"ip_address"`
-	PhoneNumber string `xml:"phone_number" json:"phone_number"`
+	XMLName     xml.Name `xml:"person"`
+	ID          int      `xml:"id" json:"id"`
+	FirstName   string   `xml:"first_name" json:"first_name"`
+	LastName    string   `xml:"last_name" json:"last_name"`
+	Company     string   `xml:"company" json:"company"`
+	Email       string   `xml:"email" json:"email"`
+	IPAddress   string   `xml:"ip_address" json:"ip_address"`
+	PhoneNumber string   `xml:"phone_number" json:"phone_number"`
 }
 
 type Persons struct {
-	People []Person `xml:"people" json:"people"`
+	XMLName xml.Name `xml:"people"`
+	People  []Person `xml:"person" json:"person"`
 }
 
 func Bring_My_Collection() *mongo.Collection {
