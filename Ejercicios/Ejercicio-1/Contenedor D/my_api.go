@@ -3,30 +3,28 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 
+	tools "github.com/JesusAGC/dockercises/Ejercicios/Ejercicio-1/MyPackage"
 	"github.com/go-chi/chi"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type Person struct {
-	ID          int
-	FirstName   string
-	LastName    string
-	Company     string
-	Email       string
-	IPAddress   string
-	PhoneNumber string
-}
+// type Person struct {
+// 	ID          int
+// 	FirstName   string
+// 	LastName    string
+// 	Company     string
+// 	Email       string
+// 	IPAddress   string
+// 	PhoneNumber string
+// }
 
-type Persons struct {
-	Persons []Person
-}
+// type Persons struct {
+// 	Persons []Person
+// }
 
 //docker run -d -p 27017:27017 --name some_mongo mongo:latest
 func main() {
@@ -55,10 +53,10 @@ func main() {
 	http.ListenAndServe(":7777", r)
 }
 
-func BringOnePerson(id int) Person {
-	mycollection := database()
+func BringOnePerson(id int) tools.Person {
+	mycollection := tools.Bring_My_Collection()
 	filter := bson.D{{"id", id}}
-	var man Person
+	var man tools.Person
 	err := mycollection.FindOne(context.TODO(), filter).Decode(&man)
 
 	if err != nil {
@@ -69,8 +67,8 @@ func BringOnePerson(id int) Person {
 	return man
 }
 
-func BringEveryone() Persons {
-	mycollection := database()
+func BringEveryone() tools.Persons {
+	mycollection := tools.Bring_My_Collection()
 	ctx := context.TODO()
 	cursor, err := mycollection.Find(ctx, bson.M{})
 	if err != nil {
@@ -82,40 +80,40 @@ func BringEveryone() Persons {
 	}
 	// fmt.Println(people)
 	l := int(len(people))
-	var collective Persons
-	ds := make([]Person, l)
+	var collective tools.Persons
+	ds := make([]tools.Person, l)
 	// bsonbytes, _ := bson.Marshal(people[0])
 	// bson.Unmarshal(bsonbytes, &dude)
 	for i := 0; i < len(people); i++ {
-		var dude Person
+		var dude tools.Person
 		bsonbytes, _ := bson.Marshal(people[i])
 		bson.Unmarshal(bsonbytes, &dude)
 		ds[i] = dude
 	}
-	collective.Persons = ds
+	collective.People = ds
 	// fmt.Println(collective.Persons)
 	// j, err := json.Marshal(collective)
 	// return j
 	return collective
 }
 
-func database() *mongo.Collection {
+// func database() *mongo.Collection {
 
-	clientOptions := options.Client().ApplyURI("mongodb://db:27017")
-	// clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
-	client, err := mongo.Connect(context.TODO(), clientOptions)
+// 	clientOptions := options.Client().ApplyURI("mongodb://db:27017")
+// 	// clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
+// 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = client.Ping(context.TODO(), nil)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	err = client.Ping(context.TODO(), nil)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Conectado a MongoDB")
-	PersonsCollection := client.Database("database_for_persons").Collection("Persons")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fmt.Println("Conectado a MongoDB")
+// 	PersonsCollection := client.Database("database_for_persons").Collection("Persons")
 
-	return PersonsCollection
+// 	return PersonsCollection
 
-}
+// }

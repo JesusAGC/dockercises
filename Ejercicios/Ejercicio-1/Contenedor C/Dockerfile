@@ -8,3 +8,4 @@ COPY . .
 
 RUN go get go.mongodb.org/mongo-driver/mongo
 
+RUN go get -u github.com/JesusAGC/dockercises/Ejercicios/Ejercicio-1/MyPackage
